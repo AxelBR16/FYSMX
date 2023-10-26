@@ -4,8 +4,9 @@
     --fuenteParrafos: 'Open Sans', sans-serif;
 
     --primario: #02416D;
-    --primarioClaro: #0a5483;
+    --primarioClaro: #70d2ff;
     --secundario: #aedd28;
+    --secundarioOscuro: #759e12;
     --claro: #f8f8ec;
     --blanco: #fff;
     --negro: #000;
@@ -56,15 +57,16 @@ img{
     max-width: 100%;
 }
 
-.logoIMG{
-    width: 5rem;
+
+.ico{
+    font-size: 4rem;
 }
 
 .iconoText{
         display: flex;
         align-items: center;
         gap: 1rem;
-        color: var(--primarioClaro);
+        color: var(--primario);
         font-size: 1.8rem;
 }
 
@@ -84,26 +86,21 @@ img{
 
 /**Header**/
 .header{
+    padding-top: 10rem;
     height: 60rem;
     background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("/img/banner.png");
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
 }
-@media (min-width: 1140px){
-    .header{
-        padding-top: 10rem;
-    }
-}
+
+
 .header__texto{
     text-align: center;
     color: var(--claro);
+    margin-top: 15rem;
 }
-@media (min-width: 768px){
-    .header__texto{
-        margin-top: 15rem;
-    }
-}
+
 .header__texto--descripcion{
     text-shadow: 1px 3px 4px rgba(255, 255, 255, 0.6);
 }
@@ -119,18 +116,16 @@ img{
 
 /** Barra de Navegación**/
 .barra{
-    padding-top: 4rem;
+    background-color: rgba(232, 226, 226, 0.7);
+    width: 100%;
+    position: fixed;
+    top: 0;
 }
 @media (min-width: 1140px){
     .barra{
-        padding-top: 0;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        background-color: rgba(232, 226, 226, 0.7);
     }
 }
 /**Logo**/
@@ -153,7 +148,7 @@ img{
 }
 .logo__x{
     background-color: #000;
-    color: #aedd28;
+    color: var(--secundario);
     padding: 1rem 0 1rem 2rem;
     border-radius: 50%;
 }
@@ -166,43 +161,52 @@ img{
     }
 }
 
+#btn-menu{
+    display: none;
+}
+.barraR{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .navegacion__enlace{
-    display: block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--primarioClaro);
     font-size: 1.8rem;
-    transition: font-size 1s ease 0s;
 }
-@media (min-width: 768px){
+
+@media (max-width: 1140px){
+    #btn-menu{
+        display: block;
+        cursor: pointer;
+        padding: 1rem;
+    }
+    .navegacion.mostrar{
+        height: 100%;
+    }
+
+    .navegacion{
+        height: 0;
+        overflow: hidden;
+    }
+}
+@media (min-width: 1140px){
     .navegacion{
         display: flex;
         gap: 2rem;
     }
 }
-.navegacion a{
+.navegacion__enlace{
+    color: var(--primario);
     transition: font-size .5s ease 0s;
 }
-.navegacion a:hover{
+.navegacion__enlace:hover{
     text-shadow: 4px 4px 8px rgba(226,246,160,1);
-    color: #759e12;
+    color: var(--secundarioOscuro);
     font-size: 2.3rem;
-}
-
-@media (min-width: 768px){
-    .contenido-principal{
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        column-gap: 4rem;
-    }
-    
-}
-.entrada {
-    border-bottom: 2px solid var(--claro);
-    margin-bottom: 2rem;
-}
-.entrada:last-of-type{
-    border: none;
-    margin-bottom: 0;
 }
 .boton{
     display: block;
@@ -236,52 +240,3 @@ img{
    }
     
 }
-
-.boton--primario{
-    background-color: var(--negro);
-}
-.boton--secundario{
-    background-color: var(--primario);
-}
-.cursos{
-    list-style: none;
-}
-
-.widget-curso{
-    border-bottom: 2px solid var(--claro);
-    margin-bottom: 2rem;
-}
-
-.widget-curso:last-of-type{
-    border: none;
-    margin-bottom: 0;
-}
-.widget-curso__label, .curso__label{
-    font-family: var(--fuenteHeading);
-    font-weight: bold;
-}
-.widget-curso__info , .curso__info{
-    font-weight: normal;
-}
-
-.widget-curso__label,.widget-curso__info,.curso__label, .curso__info{
-    font-size: 2rem;
-}
-.footer{
-    background-color: var(--negro);
-    color: var(--blanco);
-    padding-bottom: 3rem;
-    margin-top: 4rem;
-}
-.footer__info{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-.footer__navegacion{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
