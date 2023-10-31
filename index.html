@@ -15,10 +15,11 @@
     <link rel="stylesheet" href="css/normalize.css">
 
     <!-- Externas -->
-    <link rel="preload" href="https://db.onlinewebfonts.com/c/240a7cb10b49b02c94ceddc459d385a9?family=Gagalin-Regular" rel="stylesheet">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans&family=PT+Sans:wght@400;700&display=swap" crossorigin="crossorigin" as="font">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://db.onlinewebfonts.com/c/240a7cb10b49b02c94ceddc459d385a9?family=Gagalin-Regular" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans&family=PT+Sans:wght@400;700&display=swap" crossorigin="anonymous" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/brutus-academy" rel="stylesheet">
+    
                 
                 
    
@@ -61,36 +62,42 @@
         </div>
     </header>
 
-
+    <div class="contenedor contenido-principal">
     <main><!--class="contenedor-pri"-->
-
-        <div class="contenedor-pri sombra">
+        <div class="contenedor-pri sombra no-padding">
 
             <section class="contenedor-section border-izq">
                 <!--Imagenn-->
-                <div class="">
-                    <img src="./img/somos.jpg" class="img-tam border-cir" alt="Imagen1">
+                <div class="principal-imagen">
+                    <picture>
+                        <source class="img-tam border-cir" srcset="./img/somos.webp" type="image/webp">
+                        <img loading="lazy"  src="./img/somos.jpg" class="img-tam border-cir" alt="imagenSomos">
+                    </picture>
                 </div>
                 
                 <div class="alinear-texto">
                     
-                    <h2>Quienes somos?</h2>
-                        <P>"Somos más que una sitio web, somos tu socio en el camino hacia la educación superior, comprometidos con la calidad, 
-                            la ética y la satisfacción del usuario en cada paso de tu búsqueda educativa."</P>    
+                    <h2 class="no-margin">Quienes somos?</h2>
+                        <P>Somos más que una sitio web, somos tu socio en el camino hacia la educación superior, comprometidos con la calidad, 
+                            la ética y la satisfacción del usuario en cada paso de tu búsqueda educativa.
+                        </P>    
                 </div>
                 
             </section>
     
-            <div class="#">
+            <div class="principal-imagen">
     
-                <section class="contenedor-section border-der">
+                <section class="contenedor-section border-der ">
 
-                    <div class="pos1">
-                        <img src="./img/vision.jpg" class="img-tam border-cir" alt="Imagen1">
+                    <div class="principal-imagen">
+                        <picture>
+                            <source class="img-tam border-cir" srcset="./img/vision.webp" type="image/webp">
+                            <img loading="lazy"  src="./img/vision.jpg" class="img-tam border-cir" alt="imagenVision">
+                        </picture>
                     </div>
                 
                     <div class="alinear-texto">
-                        <h2>Vision</h2>
+                        <h2 class="no-margin" >Vision</h2>
                         <p>Nam in leo nec orci efficitur rutrum nec ac turpis. Etiam id urna sed urna pulvinar vulputate.
                         Aliquam vel lacus eget felis ultricies tincidunt nec ac lorem. Proin pretium accumsan ullamcorper.</p>
                     </div>
@@ -99,27 +106,28 @@
     
                 <section class="contenedor-section border-izq">
 
-                    <div class="">
-                        <img src="./img/mision.jpg" class="border-cir img-tam " alt="Imagen1">
+                    <div class="principal-imagen">
+                        <picture>
+                            <source class="img-tam border-cir" srcset="./img/mision.webp" type="image/webp">
+                            <img loading="lazy"  src="./img/mision.jpg" class="img-tam border-cir" alt="imagenMision">
+                        </picture>
                     </div>
 
                     <div class="alinear-texto">
-                        <h2>Mision</h2>
+                        <h2 class="no-margin" >Mision</h2>
                         <P>Nam in leo nec orci efficitur rutrum nec ac turpis. Etiam id urna sed urna pulvinar vulputate.
                         Aliquam vel lacus eget felis ultricies tincidunt nec ac lorem. Proin pretium accumsan ullamcorper.</P>
                     </div>
                 </section>
-    
-                <!--Espacio Publicitario-->
-           
             </div>
         </div>
-
-        <aside class="contenedor-pri sombra">
-            <P>Publicidad sssssss</P>
-        </aside>
-   
     </main>
+    
+    <aside class="contenedor-pri sombra">
+            <h3>Publicidad</h3>
+            <p></p>
+    </aside>
+    </div>
     
     <footer >
         
