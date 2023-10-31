@@ -248,14 +248,19 @@ footer .ico{
     padding: 1rem 0 1rem 2rem;
     border-radius: 50%;
 }
-.logo__img{
-    width: 9rem;
-}
-@media (min-width: 768px){
+
+@media (max-width: 480px){
     .logo__img{
-        width: 13rem;
+        width: 8rem;
     }
 }
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .logo__img{
+        width: 12rem;
+    }
+}
+
 
 #btn-menu{
     display: none;
