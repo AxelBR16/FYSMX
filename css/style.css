@@ -7,9 +7,11 @@
     --primarioClaro: #70d2ff;
     --secundario: #aedd28;
     --secundarioOscuro: #759e12;
+    --section: #70d2ff;
     --claro: #f8f8ec;
     --blanco: #fff;
     --negro: #000;
+    --grisClaro: #DFE9F3;
 }
 
 html{
@@ -22,8 +24,25 @@ html{
 }
 body{
     font-family: var(--fuenteParrafos);
-    font-size: 1.6rem;
+    font-size: 2.2rem;
     line-height: 2;
+    background-image: linear-gradient(to top, var(--grisClaro) 0%, var(--blanco) 100% );
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 1300px) { 
+    main{
+        flex-direction: row;
+    }
+}
+
+main img{
+    border-radius: 2rem;
+    object-fit: cover;
 }
 
 /**Globales**/
@@ -34,8 +53,6 @@ body{
     margin: 0 auto;
 }
 
-<<<<<<< Updated upstream
-=======
 .contenedor-pri{
     margin: 5rem 0;
 }
@@ -50,10 +67,10 @@ body{
     border-radius: 1rem;
 }
 
->>>>>>> Stashed changes
 a{
     text-decoration: none;
 }
+
 h1,h2,h3,h4{
     font-family: var(--fuenteHeading);
     line-height: 1.2;
@@ -68,15 +85,28 @@ h3{
     font-size: 3.2rem;
 }
 h4{
-    font-size: 2.8rem;
+    font-size: 2.2rem;
 }
+
+main p{
+    color: var(--negro);
+}
+/*
 img{
     max-width: 100%;
 }
 
+*/
 
 .ico{
     font-size: 4rem;
+   
+}
+.ico-p{
+    font-size: 3rem;
+}
+footer .ico{
+    color: var(--blanco);
 }
 
 .iconoText{
@@ -84,8 +114,6 @@ img{
         align-items: center;
         justify-content: center;
         gap: 1rem;
-        color: var(--primario);
-        font-size: 1.8rem;
 }
 
 /** Utilidades **/
@@ -101,14 +129,69 @@ img{
 }
 
 
+.alinear-texto{
+    padding: 2rem;
+    line-height: 2;
+    align-items: center;
+}
+
+.alinear-texto h2{
+    text-align: center;
+    text-shadow:  1px 1px 2px rgb(125, 184, 240), 0 0 1em blue, 0 0 0.2em blue;
+    color: #b3e5ff;
+    font-weight: bold;
+}
+
+.alinear-texto p{
+    color: var(--claro);
+}
+
+.pos1{
+    order: 0;
+}
+@media (min-width: 1140px){
+    .border-cir{
+        border-radius: 20rem 0 0 20rem ;
+        margin-left: .5rem;
+    }   
+}
+
+.border-izq{
+    border-radius: 0;
+    /*margin: 2rem 0 0 2rem;*/
+}
+
+@media (min-width: 1140px) { /*1335*/
+    .border-izq{
+        border-radius: 20rem 0 0 20rem;
+    }
+    
+}
+
+.border-der{
+    border-radius: 0;
+    /*margin-right: 2rem;*/
+    text-align: right;
+}
+
+@media (max-width: 956px) { 
+    .border-der,
+    .border-izq{
+    border-radius: 0;
+    }
+}
+
 
 /**Header**/
 .webp .header{
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("/img/banner.webp");
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("../img/banner.webp");
+    background-attachment: fixed;
 }
 .no-webp .header{
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("/img/banner.png");
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("../img/banner.png");
+    background-attachment: fixed;
 }
+
 .header{
     padding-top: 10rem;
     height: 60rem;
@@ -116,7 +199,6 @@ img{
     background-size: cover;
     position: relative;
 }
-
 
 .header__texto{
     text-align: center;
@@ -143,6 +225,7 @@ img{
     width: 100%;
     position: fixed;
     top: 0;
+    z-index: 2;
 }
 @media (min-width: 1140px){
     .barra{
@@ -171,18 +254,24 @@ img{
 }
 .logo__x{
     background-color: #000;
+    font-family: 'Brutus Academy', sans-serif;
     color: var(--secundario);
     padding: 1rem 0 1rem 2rem;
     border-radius: 50%;
 }
-.logo__img{
-    width: 9rem;
-}
-@media (min-width: 768px){
+
+@media (max-width: 480px){
     .logo__img{
-        width: 13rem;
+        width: 8rem;
     }
 }
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .logo__img{
+        width: 12rem;
+    }
+}
+
 
 #btn-menu{
     display: none;
@@ -257,6 +346,7 @@ img{
     background: rgb(37,186,255);
     background: linear-gradient(180deg, rgba(37,186,255,1) 0%, rgba(0,128,219,1) 100%);
     cursor: pointer;
+    color: var(--blanco);
 }
 @media (min-width: 768px){
    .boton{
@@ -266,9 +356,18 @@ img{
 }
 
 /** main **/
+@media (min-width: 1140px){
+    .contenido-principal{
+        display: grid;
+        grid-template-columns: 5fr 1fr;
+        column-gap: 3rem;
+    } 
+    
+}
+.principal-imagen{
+    width: 100%;
+}
 
-<<<<<<< Updated upstream
-=======
 /*Quienes somos MV*/
 .contenedor-section{
     display: flex;
@@ -323,13 +422,24 @@ img{
 footer{
     background-color: var(--primario);
     color: var(--blanco);
+    overflow: hidden;
+    height: 32rem;
 }
+@media (min-width: 1440px){
+    footer{
+        height: 15rem;
+    }
+}
+
 
 footer a{
     text-decoration: none;
     color: var(--blanco);
 }
-
+.contenedor-footer{
+    position: relative;
+    top: -10rem;
+}
 @media (min-width:1050px) { 
     .contenedor-footer{
         display: grid;
@@ -345,20 +455,21 @@ footer a{
   justify-content: center;
 }
 
+
+
 .f-logo .barraR{
     width: 13rem; 
     margin: 0 auto;
 }
 
 .f-contactos{
-    display: flex;
-    flex-direction: column;
-    padding-top: 5rem;
-    /*
-    padding-left: 5rem;
-    
-    */
-    align-items: center;
+    height: 10rem;
+    text-align: center;
+}
+.footer__logo{
+    height: 30rem;
+    object-position: 0 -11rem;
+    display: inline-block;
 }
 
 @media (max-width: 956px) { 
@@ -388,7 +499,6 @@ footer a{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 5rem;
 }
 
 .redes{
@@ -397,11 +507,16 @@ footer a{
     align-items: center;
     justify-content: space-evenly;
 }
-
+@media (max-width: 1140px){
+    .redes{
+        padding-top: 2rem;
+    }
+}
 .redes ion-icon{
     width: 4rem;
     height: 4rem;
 }
+
 /*Pagina Escuelas*/
 .sticky{
     position: sticky;
@@ -415,15 +530,9 @@ footer a{
     margin-right: 5%;
 }
 
-.contenedor-escuelas__navegacion{
-    flex: 1;
-    position: sticky;
-}
 .contenedor-escuelas__main{
     margin: 2rem 0 2rem;
-    flex: 3;
 }
-
 .flex-container{
     display: flex;
     flex-direction: row;
@@ -438,4 +547,35 @@ footer a{
     min-width: 20rem;
     text-align: center;
 }
->>>>>>> Stashed changes
+.tam-img-escuelas{
+    height: 20rem;
+}
+.carrera__titulo{
+    color: #000;
+    text-shadow: 0 0 0.2em #8F7;
+}
+.carrera__universidad{
+    font-size: 2rem;
+}
+.carrera__descripcion{
+    font-size: 1.8rem;
+}
+.escuela__sede{
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+.carrera__ico{
+    color: var(--secundarioOscuro);
+}
+/*Pagina Detalle de escuela*/
+.detalles__titulo{
+    color: var(--primario);
+    text-shadow: 0 0 0.2em var(--primarioClaro);
+}
+.detalles__imagen{
+    height: 40rem;
+    width: 100%;
+    object-fit: contain;
+}
+
