@@ -131,11 +131,22 @@ if ($id == ''  || $token == '') {
             <div class="contenedor">
                 <h2 class="detalles__titulo"><?php echo $nombre; ?></h2>
                 <div>
-                    <img  class="img-fluid detalles__imagen" src="<?php echo $imagen; ?>" alt="">
+                <img  class="img-fluid detalles__imagen" src="<?php echo $imagen; ?>" alt="">
                     <p><?php echo $descripcionC; ?></p>
-                    <h3></h3>
+                    <br>
+                    <h3>Costo</h3>
+                    <p>Esta carrera tiene una mensualidad de $ <?php echo number_format($row['precio'],2,'.',','); ?> MXN</p>
+                    <br>
+                    <h3>Plan de estudios</h3>
+                    <p><?php echo $planEstudios;?></p>
+                    <br>
+                    <h3>Proceso para ingresar</h3>
+                    <p><?php echo $procesoAdmision;?></p>
+                    <br>
+                    <h3>Sedes</h3>
+                    <p><?php echo $sedes;?></p>
                 </div>
-            </div>
+             </div><!--.contenedor -->
         </main>
     </div>
     
