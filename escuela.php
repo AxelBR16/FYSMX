@@ -1,7 +1,7 @@
 <?php
 // Importa la clase Database 
 require 'config/database.php';
-//Importa configuracion
+// Importa configuracion
 require 'config/config.php';
 
 // Crea una instancia de la clase Database
@@ -10,8 +10,23 @@ $db = new Database();
 // Establece la conexión a la base de datos
 $con = $db->conectar();
 
-// Prepara la consulta SQL 
-$sql = $con->prepare('SELECT id, nombre, precio, sedes, universidad FROM licenciaturas');
+// Número de resultados por página
+$resultadosPorPagina = 12;
+
+// Página actual
+if (isset($_GET['pagina'])) {
+    $pagina = $_GET['pagina'];
+} else {
+    $pagina = 1;
+}
+
+// Calcula el número de filas a saltar (offset)
+$offset = ($pagina - 1) * $resultadosPorPagina;
+
+// Prepara la consulta SQL con LIMIT y OFFSET
+$sql = $con->prepare('SELECT id, nombre, precio, sedes, universidad FROM licenciaturas LIMIT :resultadosPorPagina OFFSET :offset');
+$sql->bindParam(':resultadosPorPagina', $resultadosPorPagina, PDO::PARAM_INT);
+$sql->bindParam(':offset', $offset, PDO::PARAM_INT);
 
 // Ejecuta la consulta
 $sql->execute();
@@ -85,10 +100,11 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     <div class="contenedor-escuelas">
         <div>
         <div class="sidebar">
-        <form class="contenedor-escuelas__navegacion" action=""><!---->
+        <form class="contenedor-escuelas__navegacion" action="" method="GET"><!---->
         <div class="hiding-arrow">
-                <i class='bx bx-left-arrow' style='color:#ffffff' ></i>
+            <i class='bx bx-left-arrow' style='color:#ffffff;'></i>
         </div>
+
             <div class="logo-details">
                 <i class='bx bxs-search-alt-2'></i>
                 <span class="logo_name">Busca</span>
@@ -107,20 +123,6 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <ul class="sub-menu">
                         <li><a class="link_name" href="#">Ubicacion</a></li>
                         <li><input type="text" name="CP" placeholder="Codigo Postal" size="10" maxlength="5"></li>
-                        <li><select name="Estado">
-                                <option value="0">Estado</option>
-                                <option value="1">Estado1</option>
-                                <option value="2">Estado2</option>
-                            </select> 
-                        </li>
-                        
-                        <li><select name="Localidad">
-                                <option value="0">Localidad</option>
-                                <option value="1">Localidad1</option>
-                                <option value="2">Localidad2</option>
-                            </select> 
-                        </li>
-
                     </ul>
     
                 </li>
@@ -137,21 +139,13 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                     </div>
     
                     <ul class="sub-menu">
-                        <li><a class="link_name" href="#">Pago</a></li>
-                        <li><select name="Pago">
-                                <option value="0">Pago</option>
-                                <option value="1">Mensual</option>
-                                <option value="2">Anual</option>
-                            </select> 
-                        </li>
-
-                        <li class="radio">
-                            <p>Rango-Precio</p>
-                            <input type="radio" name="rango-precio" value="1">- 1000 <br>
-                            <input type="radio" name="rango-precio" value="2">1000 - 2500<br>
-                            <input type="radio" name="rango-precio" value="3">2500 - 5000<br>
-                            <input type="radio" name="rango-precio" value="2">5000 +
-                        </li>
+                    <li class="radio">
+                        <p>Rango-Precio</p>
+                        <input type="radio" name="rango-precio" value="1" id="rango-1">- 1000 <br>
+                        <input type="radio" name="rango-precio" value="2" id="rango-2">1000 - 2500<br>
+                        <input type="radio" name="rango-precio" value="3" id="rango-3">2500 - 5000<br>
+                        <input type="radio" name="rango-precio" value="4" id="rango-4">5000 +
+                    </li>
 
                     </ul>
     
@@ -297,7 +291,7 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="text-end">
                             <a href="carreras.php?id=<?php echo $row['id']; ?>&token=<?php echo hash_hmac('sha1',$row['id'], KEY_TOKEN);  ?>" 
-                            class="boton b">Ver mas</a>
+                            class="boton carrera__boton">Ver mas</a>
                         </div>                        
                       </div>
                     </div>
@@ -309,10 +303,40 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                 </div>
               </div>
         </main>
+        
     </div>
-    
+
+    <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <?php
+        // Prepara una consulta sin LIMIT y OFFSET para obtener el número total de filas
+        $sqlTotal = $con->prepare('SELECT COUNT(*) as total FROM licenciaturas');
+        $sqlTotal->execute();
+        $totalFilas = $sqlTotal->fetch(PDO::FETCH_ASSOC)['total'];
+
+        // Calcula el número total de páginas
+        $totalPaginas = ceil($totalFilas / $resultadosPorPagina);
+        // Boton anterior
+        if ($pagina > 1) {
+            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina - 1) . '">
+            <ion-icon aria-hidden="true" name="caret-back-outline"></ion-icon></a></li>';
+        }
+
+        // Enlaces de paginación
+        for ($i = 1; $i <= $totalPaginas; $i++) {
+            $claseActiva = ($i == $pagina) ? 'paginacion--active' : '';
+            echo '<li class="page-item"><a class="page-link paginacion__item ' . $claseActiva . '" href="?pagina=' . $i . '">' . $i . '</a></li>';
+        }
+         // Botón siguiente
+         if ($pagina < $totalPaginas) {
+            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina + 1) . '">
+            <ion-icon name="caret-forward-outline" style="display:absolute; top:3rem;"></ion-icon></a></li>';
+        }
+        ?>
+    </ul>
+    </nav>
     <footer >
-        <div style="height: 150px; overflow: hidden; position: relative;" ><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M-0.00,49.85 C150.00,149.60 271.37,-49.85 500.00,49.85 L500.00,0.00 L-0.00,0.00 Z" style="stroke: none; fill: #08f;"></path></svg></div>
+        <div style="height: 150px; overflow: hidden; position: relative;" ><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M-0.00,49.85 C150.00,149.60 271.37,-49.85 500.00,49.85 L500.00,0.00 L-0.00,0.00 Z" style="stroke: none; fill: #a5f3fc;"></path></svg></div>
             <div class="contenedor-footer">
                 
                 <section class="f-logo">

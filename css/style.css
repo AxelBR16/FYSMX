@@ -1,3 +1,41 @@
+@-webkit-keyframes pulsate-fwd {
+    0% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+    50% {
+      -webkit-transform: scale(1.1);
+              transform: scale(1.1);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  @keyframes pulsate-fwd {
+    0% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+    50% {
+      -webkit-transform: scale(1.1);
+              transform: scale(1.1);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  
+  
+.vibrate-1 {
+	-webkit-animation: pulsate-fwd 0.8s ease-in-out infinite both;
+	        animation: pulsate-fwd 0.8s ease-in-out infinite both;
+} 
+.vibrate-1:hover {
+    -webkit-animation: none;
+    animation: none;
+} 
 :root{
     --fuenteLogo: "Gagalin-Regular";
     --fuenteHeading: 'PT Sans', sans-serif;
@@ -27,6 +65,12 @@ body{
     font-size: 2.2rem;
     line-height: 2;
     background-image: linear-gradient(to top, var(--grisClaro) 0%, var(--blanco) 100% );
+}
+@media (max-width: 468px){
+    body{
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 }
 
 main{
@@ -425,7 +469,7 @@ footer{
     overflow: hidden;
     height: 32rem;
 }
-@media (min-width: 1440px){
+@media (min-width: 768px){
     footer{
         height: 15rem;
     }
@@ -549,6 +593,7 @@ footer a{
 }
 .tam-img-escuelas{
     height: 20rem;
+    object-fit: fill;
 }
 .carrera__titulo{
     color: #000;
@@ -563,10 +608,17 @@ footer a{
 .escuela__sede{
     margin-top: 1rem;
     margin-left: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 7rem;
 }
 .carrera__ico{
     color: var(--secundarioOscuro);
+}
+@media (min-width: 768px){
+    .carrera__boton{
+        position: absolute;
+        bottom: -1rem;
+        right: 1rem;
+    }
 }
 /*Pagina Detalle de escuela*/
 .detalles__titulo{
@@ -579,3 +631,14 @@ footer a{
     object-fit: contain;
 }
 
+/*Paginacion*/
+.paginacion__item{
+    color: var(--negro);
+    padding: 2rem;
+    background-color: var(--blanco);    
+    margin-right: .5rem;
+}
+.paginacion--active{
+    background-color: #000;
+    color: #8F7;
+}
