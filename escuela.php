@@ -178,23 +178,6 @@ $con = $db->conectar();
                         </li>
                     </ul>
                 </li>
-    
-                <!--
-                <li><!--Seccion de perfil -->
-                    <!-- <div class="profile-details"> 
-                        <div class="profile-content">
-                            <img src="img/images.png" alt="profile">
-                        </div>
-                        <div class="name-job">
-                            <div class="profile_name">FYSMX</div>
-                            <div class="job"></div>
-                        </div>
-                        <i class='bx bx-log-out' ></i>
-                    </div>
-            
-                </li>
-                -->
-    
             </ul>
             </form>
             <?php
@@ -210,8 +193,9 @@ $con = $db->conectar();
                 // Calcula el número de filas a saltar (offset)
                 $offset = ($pagina - 1) * $resultadosPorPagina;
 
-                // Construye la condición del rango de precios
+                // Construye la condición del rango de precios y código postal
                 $condicionPrecio = '';
+                $condicionCodigoPostal = '';
                 if (isset($_GET['rango-precio']) && $_GET['rango-precio'] != '0') {
                     $rangosPrecios = array(
                         '1' => array(0, 1000),
@@ -227,26 +211,46 @@ $con = $db->conectar();
                     $condicionPrecio = ' AND precio BETWEEN :minPrecio AND :maxPrecio';
                 }
 
+                if (isset($_GET['CP']) && !empty($_GET['CP'])) {
+                    $codigoPostal = $_GET['CP'];
+                    $condicionCodigoPostal = ' AND FIND_IN_SET(:codigoPostal, codigosPostales) > 0';
+                }
+
                 // Modificar la consulta para obtener el total de filas
-                $sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio");
+                $sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal");
+
                 // Si hay condición de precio, también vincula los parámetros del rango de precios
                 if (!empty($condicionPrecio)) {
                     $sqlCount->bindParam(':minPrecio', $minPrecio, PDO::PARAM_INT);
                     $sqlCount->bindParam(':maxPrecio', $maxPrecio, PDO::PARAM_INT);
                 }
+
+                // Si hay condición de código postal, también vincula el parámetro del código postal
+                if (!empty($condicionCodigoPostal)) {
+                    $sqlCount->bindParam(':codigoPostal', $codigoPostal, PDO::PARAM_STR);
+                }
+
                 // Ejecuta la consulta para obtener el total de filas
                 $sqlCount->execute();
                 $totalFilas = $sqlCount->fetch(PDO::FETCH_ASSOC)['total'];
 
-                // Prepara la consulta SQL con LIMIT, OFFSET y la condición del rango de precios
-                $sql = $con->prepare("SELECT id, nombre, precio, sedes, universidad FROM licenciaturas WHERE 1 $condicionPrecio LIMIT :resultadosPorPagina OFFSET :offset");
+                // Prepara la consulta SQL con LIMIT, OFFSET y la condición del rango de precios y código postal
+                $sql = $con->prepare("SELECT id, nombre, precio, sedes, universidad FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal LIMIT :resultadosPorPagina OFFSET :offset");
+
                 $sql->bindParam(':resultadosPorPagina', $resultadosPorPagina, PDO::PARAM_INT);
                 $sql->bindParam(':offset', $offset, PDO::PARAM_INT);
+
                 // Si hay condición de precio, también vincula los parámetros del rango de precios
                 if (!empty($condicionPrecio)) {
                     $sql->bindParam(':minPrecio', $minPrecio, PDO::PARAM_INT);
                     $sql->bindParam(':maxPrecio', $maxPrecio, PDO::PARAM_INT);
                 }
+
+                // Si hay condición de código postal, también vincula el parámetro del código postal
+                if (!empty($condicionCodigoPostal)) {
+                    $sql->bindParam(':codigoPostal', $codigoPostal, PDO::PARAM_STR);
+                }
+
                 // Ejecuta la consulta
                 $sql->execute();
 
@@ -257,7 +261,8 @@ $con = $db->conectar();
         </div>
         <main  class="contenedor-escuelas__main">
             <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-<?php echo (count($result) === 1) ? '2' : '3'; ?> g-3">
                 <?php
                 if (!empty($result)) {
                    foreach($result as $row) {  ?>
@@ -343,26 +348,38 @@ $con = $db->conectar();
 
     <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        <?php
+    <?php
         // Calcula el número total de páginas
         $totalPaginas = ceil($totalFilas / $resultadosPorPagina);
+
         // Boton anterior
         if ($pagina > 1) {
-            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina - 1) . '">
+            // Verifica si el parámetro 'rango-precio' está definido antes de acceder a él
+            $rangoPrecio = isset($_GET['rango-precio']) ? $_GET['rango-precio'] : '';
+            $codigoPostal = isset($_GET['CP']) ? $_GET['CP'] : '';
+
+            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina - 1) . '&rango-precio=' . urlencode($rangoPrecio) . '&CP=' . urlencode($codigoPostal) . '">
             <ion-icon aria-hidden="true" name="caret-back-outline"></ion-icon></a></li>';
         }
 
         // Enlaces de paginación
         for ($i = 1; $i <= $totalPaginas; $i++) {
             $claseActiva = ($i == $pagina) ? 'paginacion--active' : '';
-            echo '<li class="page-item"><a class="page-link paginacion__item ' . $claseActiva . '" href="?pagina=' . $i . '">' . $i . '</a></li>';
+            $rangoPrecio = isset($_GET['rango-precio']) ? $_GET['rango-precio'] : '0'; // Valor predeterminado de '0'
+            $codigoPostal = isset($_GET['CP']) ? $_GET['CP'] : '';
+            // Añade los parámetros de filtrado a los enlaces de paginación
+            echo '<li class="page-item"><a class="page-link paginacion__item ' . $claseActiva . '" href="?pagina=' . $i . '&rango-precio=' . urlencode($rangoPrecio) . '&CP=' . urlencode($codigoPostal) . '">' . $i . '</a></li>';
         }
-         // Botón siguiente
-         if ($pagina < $totalPaginas) {
-            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina + 1) . '">
+
+        // Botón siguiente
+        if ($pagina < $totalPaginas) {
+            $rangoPrecio = isset($_GET['rango-precio']) ? $_GET['rango-precio'] : '0'; // Valor predeterminado de '0'
+            $codigoPostal = isset($_GET['CP']) ? $_GET['CP'] : '';
+
+            echo '<li class="page-item"><a class="page-link paginacion__item" href="?pagina=' . ($pagina + 1) . '&rango-precio=' . urlencode($rangoPrecio) . '&CP=' . urlencode($codigoPostal) . '">
             <ion-icon name="caret-forward-outline" style="display:absolute; top:3rem;"></ion-icon></a></li>';
         }
-        ?>
+    ?>
     </ul>
     </nav>
     <footer >
