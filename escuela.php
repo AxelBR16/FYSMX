@@ -9,30 +9,6 @@ $db = new Database();
 
 // Establece la conexión a la base de datos
 $con = $db->conectar();
-
-// Número de resultados por página
-$resultadosPorPagina = 12;
-
-// Página actual
-if (isset($_GET['pagina'])) {
-    $pagina = $_GET['pagina'];
-} else {
-    $pagina = 1;
-}
-
-// Calcula el número de filas a saltar (offset)
-$offset = ($pagina - 1) * $resultadosPorPagina;
-
-// Prepara la consulta SQL con LIMIT y OFFSET
-$sql = $con->prepare('SELECT id, nombre, precio, sedes, universidad FROM licenciaturas LIMIT :resultadosPorPagina OFFSET :offset');
-$sql->bindParam(':resultadosPorPagina', $resultadosPorPagina, PDO::PARAM_INT);
-$sql->bindParam(':offset', $offset, PDO::PARAM_INT);
-
-// Ejecuta la consulta
-$sql->execute();
-
-// Obtiene todos los resultados como un array asociativo
-$result = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -141,10 +117,11 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <ul class="sub-menu">
                     <li class="radio">
                         <p>Rango-Precio</p>
-                        <input type="radio" name="rango-precio" value="1" id="rango-1">- 1000 <br>
-                        <input type="radio" name="rango-precio" value="2" id="rango-2">1000 - 2500<br>
-                        <input type="radio" name="rango-precio" value="3" id="rango-3">2500 - 5000<br>
-                        <input type="radio" name="rango-precio" value="4" id="rango-4">5000 +
+                        <input type="radio" name="rango-precio" value="0" id="rango-0"> Ninguno <br>
+                        <input type="radio" name="rango-precio" value="1" id="rango-1"> - 1000 <br>
+                        <input type="radio" name="rango-precio" value="2" id="rango-2"> 1000 - 2500<br>
+                        <input type="radio" name="rango-precio" value="3" id="rango-3"> 2500 - 5000<br>
+                        <input type="radio" name="rango-precio" value="4" id="rango-4"> 5000 +
                     </li>
 
                     </ul>
@@ -220,13 +197,70 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     
             </ul>
             </form>
+            <?php
+                $resultadosPorPagina = 12;
+
+                // Página actual
+                if (isset($_GET['pagina'])) {
+                    $pagina = $_GET['pagina'];
+                } else {
+                    $pagina = 1;
+                }
+
+                // Calcula el número de filas a saltar (offset)
+                $offset = ($pagina - 1) * $resultadosPorPagina;
+
+                // Construye la condición del rango de precios
+                $condicionPrecio = '';
+                if (isset($_GET['rango-precio']) && $_GET['rango-precio'] != '0') {
+                    $rangosPrecios = array(
+                        '1' => array(0, 1000),
+                        '2' => array(1000, 2500),
+                        '3' => array(2500, 5000),
+                        '4' => array(5000, PHP_INT_MAX)
+                    );
+
+                    $selectedRange = $_GET['rango-precio'];
+                    $minPrecio = $rangosPrecios[$selectedRange][0];
+                    $maxPrecio = $rangosPrecios[$selectedRange][1];
+
+                    $condicionPrecio = ' AND precio BETWEEN :minPrecio AND :maxPrecio';
+                }
+
+                // Modificar la consulta para obtener el total de filas
+                $sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio");
+                // Si hay condición de precio, también vincula los parámetros del rango de precios
+                if (!empty($condicionPrecio)) {
+                    $sqlCount->bindParam(':minPrecio', $minPrecio, PDO::PARAM_INT);
+                    $sqlCount->bindParam(':maxPrecio', $maxPrecio, PDO::PARAM_INT);
+                }
+                // Ejecuta la consulta para obtener el total de filas
+                $sqlCount->execute();
+                $totalFilas = $sqlCount->fetch(PDO::FETCH_ASSOC)['total'];
+
+                // Prepara la consulta SQL con LIMIT, OFFSET y la condición del rango de precios
+                $sql = $con->prepare("SELECT id, nombre, precio, sedes, universidad FROM licenciaturas WHERE 1 $condicionPrecio LIMIT :resultadosPorPagina OFFSET :offset");
+                $sql->bindParam(':resultadosPorPagina', $resultadosPorPagina, PDO::PARAM_INT);
+                $sql->bindParam(':offset', $offset, PDO::PARAM_INT);
+                // Si hay condición de precio, también vincula los parámetros del rango de precios
+                if (!empty($condicionPrecio)) {
+                    $sql->bindParam(':minPrecio', $minPrecio, PDO::PARAM_INT);
+                    $sql->bindParam(':maxPrecio', $maxPrecio, PDO::PARAM_INT);
+                }
+                // Ejecuta la consulta
+                $sql->execute();
+
+                // Obtiene todos los resultados como un array asociativo
+                $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+            ?>
             </div>
         </div>
         <main  class="contenedor-escuelas__main">
             <div class="container">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
-                  <?php foreach($result as $row) {  ?>
+                <?php
+                if (!empty($result)) {
+                   foreach($result as $row) {  ?>
                   <div class="col">
                     <div class="card shadow-sm"  style="height: 100%;">
                       <?php
@@ -296,24 +330,20 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                       </div>
                     </div>
                   </div>
-
-                  <?php } ?>
-              
-        
+                    <?php } } else {?>
                 </div>
+                    <p>No se encontraron Registros</p>
+                    <img class="img-tam" src="img/triste.jpg" alt="">
+                    <?php 
+                    }
+                    ?>
               </div>
         </main>
-        
     </div>
 
     <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <?php
-        // Prepara una consulta sin LIMIT y OFFSET para obtener el número total de filas
-        $sqlTotal = $con->prepare('SELECT COUNT(*) as total FROM licenciaturas');
-        $sqlTotal->execute();
-        $totalFilas = $sqlTotal->fetch(PDO::FETCH_ASSOC)['total'];
-
         // Calcula el número total de páginas
         $totalPaginas = ceil($totalFilas / $resultadosPorPagina);
         // Boton anterior
@@ -376,6 +406,8 @@ $result = $sql->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <!--Scrip sidebar-->
     <script src="js/sidebar.js"></script>
+    <!-- filtrado -->
+    <script src="js/filtrado.js"></script>
 
 </body>
 </html>

@@ -26,16 +26,21 @@
               transform: scale(1);
     }
   }
-  
-  
-.vibrate-1 {
-	-webkit-animation: pulsate-fwd 0.8s ease-in-out infinite both;
-	        animation: pulsate-fwd 0.8s ease-in-out infinite both;
-} 
-.vibrate-1:hover {
+.vibrate-1 { 
     -webkit-animation: none;
-    animation: none;
-} 
+        animation: none; 
+}
+  
+@media (min-width: 768px){
+    .vibrate-1 {
+        -webkit-animation: pulsate-fwd 0.8s ease-in-out infinite both;
+                animation: pulsate-fwd 0.8s ease-in-out infinite both;
+    } 
+    .vibrate-1:hover {
+        -webkit-animation: none;
+        animation: none;
+    }    
+}
 :root{
     --fuenteLogo: "Gagalin-Regular";
     --fuenteHeading: 'PT Sans', sans-serif;
