@@ -30,10 +30,12 @@
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
 
-
+    <!-- Internas -->
+    <link rel="preload" href="css/valora.css" as="style">
+    <link rel="stylesheet" href="css/valora.css">
 </head>
 <body>
-    <header class="header">
+    <header>
             <div class="contenedor barra">
                 <div class="barraR">
                     <ion-icon id="btn-menu" class="ico" name="menu-outline"></ion-icon>
@@ -57,81 +59,48 @@
                         </a>
                 </nav>
             </div>
-            <div class="header__texto">
-                <h2 class="no-margin header__texto--descripcion">Escuelas Privadas de la CD<span class="header__texto--active">MX</span></h2>
-                <p class="no-margin header__texto--margin"><i>"Guiando tu camino hacia la excelencia educativa"</i></p>
-                <a href="escuela.php" class="boton vibrate-1">Busca aqui</a>
-        </div>
     </header>
 
-    <div class="contenedor contenido-principal">
-        <main><!--class="contenedor-pri"-->
-            <div class="contenedor-pri sombra no-padding">
-    
-                <section class="contenedor-section border-izq">
-                    <!--Imagenn-->
-                    <div class="principal-imagen">
-                        <picture>
-                            <source class="img-tam border-cir" srcset="./img/somos.webp" type="image/webp">
-                            <img loading="lazy"  src="./img/somos.jpg" class="img-tam border-cir" alt="imagenSomos">
-                        </picture>
-                    </div>
-                    
-                    <div class="alinear-texto">
-                        
-                        <h2 class="no-margin">Quienes somos?</h2>
-                            <P>Somos más que una sitio web, somos tu socio en el camino hacia la educación superior, comprometidos con la calidad, 
-                                la ética y la satisfacción del usuario en cada paso de tu búsqueda educativa.
-                            </P>    
-                    </div>
-                    
-                </section>
-        
-                <div class="principal-imagen">
-        
-                    <section class="contenedor-section border-der ">
-    
-            
-                    
-                        <div class="alinear-texto">
-                            <h2 class="no-margin" >Vision</h2>
-                            <p>Nam in leo nec orci efficitur rutrum nec ac turpis. Etiam id urna sed urna pulvinar vulputate.
-                            Aliquam vel lacus eget felis ultricies tincidunt nec ac lorem. Proin pretium accumsan ullamcorper.</p>
-                        </div>
-    
-                        <div class="principal-imagen">
-                            <picture>
-                                <source class="img-tam border-cir" srcset="./img/vision.webp" type="image/webp">
-                                <img loading="lazy"  src="./img/vision.jpg" class="img-tam border-der" alt="imagenVision">
-                            </picture>
-                        </div>
-                        
-                    </section>
-        
-                    <section class="contenedor-section border-izq">
-    
-                        <div class="principal-imagen">
-                            <picture>
-                                <source class="img-tam border-cir" srcset="./img/mision.webp" type="image/webp">
-                                <img loading="lazy"  src="./img/mision.jpg" class="img-tam border-cir" alt="imagenMision">
-                            </picture>
-                        </div>
-    
-                        <div class="alinear-texto">
-                            <h2 class="no-margin" >Mision</h2>
-                            <P>Nam in leo nec orci efficitur rutrum nec ac turpis. Etiam id urna sed urna pulvinar vulputate.
-                            Aliquam vel lacus eget felis ultricies tincidunt nec ac lorem. Proin pretium accumsan ullamcorper.</P>
-                        </div>
-                    </section>
-                </div>
+    <section class="contenedor valora">
+        <div class="text-center iconoText">
+            <ion-icon class="ico" name="star"></ion-icon>
+            <h3 class="centrar-texto">Valora Licenciaturas</h3>
+        </div>
+        <div class="contacto-bg"></div>
+        <form class="formulario" action="?" method="POST">
+            <div class="campo iconoText">
+                <ion-icon class="ico" name="school"></ion-icon>
+                <label class="campo__label" for="nombre">Escuela:</label>
+                <input class="campo__field" type="text" placeholder="Tu escuela" id="escuela">
             </div>
-        </main>
-    <aside class="contenedor-pri sombra">
-            <h3>Publicidad</h3>
-            <p></p>
-    </aside>
-    </div>
-    
+            <div class="campo iconoText">
+                <ion-icon class="ico" name="receipt-outline"></ion-icon>
+                <label class="campo__label" for="email">Carrera:</label>
+                <input class="campo__field" type="email" placeholder="Tu carrera" id="email">
+            </div>   
+            <div class="campo iconoText">
+                <ion-icon class="ico" name="help-outline"></ion-icon>
+                <label class="campo__label" for="mensaje">Opinion:</label>
+                <textarea class="campo__field campo__field--textarea" id="mensaje">
+                </textarea>
+            </div>
+            <div class="campo iconoText">
+                <ion-icon class="ico" name="checkbox-outline"></ion-icon>
+                <label for="rating-container">Calificacion:</label>
+                <div class="rating-container campo__field--star" id="rating-container">
+                    <!-- Aquí se generarán las estrellas dinámicamente -->
+                </div>
+                <p>Calificación: <span id="rating-value">0</span></p>
+            </div>
+            <div class="campo">
+                <div class="g-recaptcha campo__reCAPTCHA" data-sitekey="6LfQuTQpAAAAAMdhOs72aogdADFsA0v1bbp2Wy_A"></div>
+            </div> 
+            <div class="campo">
+                <input  type="submit" value="Enviar" class="boton campo__reCAPTCHA">
+            </div>        
+        </form>
+    </section>
+
     <footer >
         <div style="height: 150px; overflow: hidden; position: relative;" ><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M-0.00,49.85 C150.00,149.60 271.37,-49.85 500.00,49.85 L500.00,0.00 L-0.00,0.00 Z" style="stroke: none; fill: #a5f3fc;"></path></svg></div>
             <div class="contenedor-footer">
@@ -169,5 +138,9 @@
     <script src="js/menuR.js"></script>
     <!-- Script  soporte Webp-->
     <script src="js/imagenWebp.js"></script>
+    <!-- Script para calificacion -->
+    <script src="js/vEstrellas.js"></script>
+    <!-- Script recaptcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>

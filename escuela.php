@@ -66,7 +66,7 @@ $con = $db->conectar();
                     <ion-icon class="ico" name="school-sharp"></ion-icon>
                     <p>Escuelas</p>
                 </a>
-                <a class="text-center iconoText navegacion__enlace" href="">
+                <a class="text-center iconoText navegacion__enlace" href="valora.html">
                     <ion-icon class="ico" name="star"></ion-icon>
                     <p>Valora</p>
                 </a>
@@ -262,7 +262,7 @@ $con = $db->conectar();
         <main  class="contenedor-escuelas__main">
             <div class="container">
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-<?php echo (count($result) === 1) ? '2' : '3'; ?> g-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-<?php echo (count($result) === 1) ? '1' : '3'; ?> g-3">
                 <?php
                 if (!empty($result)) {
                    foreach($result as $row) {  ?>

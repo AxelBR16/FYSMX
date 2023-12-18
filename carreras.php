@@ -121,7 +121,7 @@ if ($id == ''  || $token == '') {
                     <ion-icon class="ico" name="school-sharp"></ion-icon>
                     <p>Escuelas</p>
                 </a>
-                <a class="text-center iconoText navegacion__enlace" href="">
+                <a class="text-center iconoText navegacion__enlace" href="valora.html">
                     <ion-icon class="ico" name="star"></ion-icon>
                     <p>Valora</p>
                 </a>

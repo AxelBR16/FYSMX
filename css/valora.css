@@ -1,0 +1,62 @@
+:root{
+    --fuenteLogo: "Gagalin-Regular";
+    --fuenteHeading: 'PT Sans', sans-serif;
+    --fuenteParrafos: 'Open Sans', sans-serif;
+
+    --primario: #02416D;
+    --primarioClaro: #70d2ff;
+    --secundario: #aedd28;
+    --secundarioOscuro: #759e12;
+    --section: #70d2ff;
+    --claro: #f8f8ec;
+    --blanco: #fff;
+    --negro: #000;
+    --grisClaro: #DFE9F3;
+}
+
+.valora{
+    margin-top: 15rem;
+}
+
+/** Contacto **/
+.contacto-bg{
+    background-image: url(../img/valora.jpg);
+    height: 40rem;
+    background-size: cover;
+    width: 100%;
+}
+.valora__titulo{
+    display: block;
+}
+/** Formulario **/
+.formulario{
+    background-color: var(--blanco);
+    margin: -10rem auto 5rem auto;
+    width: 95%;
+    padding: 5rem;
+}
+.campo{
+    display: flex;
+    margin-bottom: 2rem;
+}
+.campo__label{
+    flex: 0 0 9rem;
+
+}
+.campo__field{
+    flex: 1;
+
+}
+.campo__field--textarea{
+    height: 20rem;
+}
+.campo__field--star{
+    margin-left: 3rem;
+}
+.star {
+    cursor: pointer;
+    margin-right: 3.5rem; 
+}
+.campo__reCAPTCHA{
+    margin: 0 auto;
+}
