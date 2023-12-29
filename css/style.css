@@ -560,5 +560,85 @@ footer a{
     height: 4rem;
 }
 
+<<<<<<< Updated upstream
+=======
+
+/*Pagina Escuelas*/
+.sticky{
+    position: sticky;
+}
+.fixed{
+    position: fixed;
+}
+.contenedor-escuelas{
+    margin: 0 auto;
+    display: flex;
+    margin-right: 5%;
+}
+>>>>>>> Stashed changes
 
 
+<<<<<<< Updated upstream
+=======
+}
+.flex-item{
+    background-color: #02416D;
+    color: #fff;
+    margin: 5px;
+    height: 12rem;
+    min-width: 20rem;
+    text-align: center;
+}
+.tam-img-escuelas{
+    height: 20rem;
+    object-fit: fill;
+}
+.carrera__titulo{
+    color: #000;
+    text-shadow: 0 0 0.2em #8F7;
+}
+.carrera__universidad{
+    font-size: 2rem;
+}
+.carrera__descripcion{
+    font-size: 1.8rem;
+}
+.escuela__sede{
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    margin-bottom: 7rem;
+}
+.carrera__ico{
+    color: var(--secundarioOscuro);
+}
+@media (min-width: 768px){
+    .carrera__boton{
+        position: absolute;
+        bottom: -1rem;
+        right: 1rem;
+    }
+}
+/*Pagina Detalle de escuela*/
+.detalles__titulo{
+    color: var(--primario);
+    text-shadow: 0 0 0.2em var(--primarioClaro);
+}
+.detalles__imagen{
+    height: 40rem;
+    width: 100%;
+    object-fit: contain;
+}
+
+/*Paginacion*/
+.paginacion__item{
+    color: var(--negro);
+    padding: 2rem;
+    background-color: var(--blanco);    
+    margin-right: .5rem;
+}
+.paginacion--active{
+    background-color: #000;
+    color: #8F7;
+}
+
+>>>>>>> Stashed changes
