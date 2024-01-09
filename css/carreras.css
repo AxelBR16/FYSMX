@@ -1,0 +1,158 @@
+:root{
+    --section:#08f;
+    --primario:#02416D;
+    --secundario_n: #1d1b31;
+    --blanco: #ffffff;
+    --azulclaro:rgb(76, 159, 233);
+    --azuloscuro:rgb(5, 74, 134);
+}
+
+body{
+    background-image: linear-gradient(to top, var(--primario) 0%, var(--blanco) 100% ) ;
+}
+
+/*Imagenes Escuela*/
+.escuela{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+.escuela .logoesc{
+    grid-column: 1/2;
+}
+
+.escuela .institucion{
+    grid-column: 2/4;
+}
+
+
+.escuela .detalles__imagen{
+    height: 40rem;
+    width: 100%;
+    object-fit: contain;
+}
+
+
+/*Servicios*/
+
+.servicios{
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+@media (min-width: 768px) { 
+    .servicios{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 1rem;/*margen entre columnas*/
+       
+    }    
+}
+
+.servicio{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.servicio h3{
+    color:var(--primario);
+    font-weight: normal;
+    font-weight: bold;
+}
+
+.servicio p{
+    line-height: 2;
+    text-align: center;
+}
+
+.servicio .iconos{
+    height: 15rem;
+    width: 15rem;
+    background-color: var(--section);
+    border-radius: 50%;
+/*alinear vertical y horizontalmente los iconos */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center; /*align items para centrar verticalmente*/
+}
+
+.servicio .iconos i{
+    font-size: 5rem;
+}
+
+.sede{
+    grid-column: 2/4;
+}
+
+.sede .contenido_sede{
+    text-align: center;
+}
+
+.sede .contenido_sede p{
+    font-size: 16px;
+}
+
+/*Plan estudios*/
+.planestudios{
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+}
+
+.planestudios h3{
+    color:azure;
+}
+
+.planestudios .periodos{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 4rem;
+    padding: 2rem;
+}
+
+
+.planestudios .periodos .contenido_periodo{
+    border-radius: 10%;
+    background-color: var(--secundario_n);
+}
+
+.planestudios .periodos .contenido_periodo:hover{
+    /*width: 110%;*/
+    /*height: 110%;*/
+    box-shadow: 0px 0px 10px antiquewhite;
+    transition: all 1s ease;
+    
+}
+
+.planestudios .periodos .contenido_periodo h4,
+.planestudios .periodos .contenido_periodo li{
+    font-size: 1.5rem;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}   
+
+/*Proceso Admisiom*/
+.proadmi{
+    background-color: var(--blanco);
+    padding: 5%;
+}
+
+.proadmi .proadmi_con{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.proadmi .proadmi_con .proadmi_lista{
+    grid-column: 1/3;
+    font-size: 14px;
+}
+
+.proadmi .proadmi_con .img{
+    grid-column: 3/4;
+    background-image: url(../img/proadmi.png);
+    background-repeat: no-repeat;
+}
+
