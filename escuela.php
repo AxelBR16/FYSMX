@@ -66,7 +66,7 @@ $con = $db->conectar();
                     <ion-icon class="ico" name="school-sharp"></ion-icon>
                     <p>Escuelas</p>
                 </a>
-                <a class="text-center iconoText navegacion__enlace" href="valora.html">
+                <a class="text-center iconoText navegacion__enlace" href="valora.php">
                     <ion-icon class="ico" name="star"></ion-icon>
                     <p>Valora</p>
                 </a>
@@ -143,7 +143,7 @@ $con = $db->conectar();
                         <li><a class="link_name" href="#">Area</a></li>
                         <li><select name="Estado">
                                 <option value="0">Area</option>
-                                <option value="1">Fisico Matematica</option>
+                                <option value="1">Fisico Matematica dsdsadasdsad l</option>
                                 <option value="2">Quimica</option>
                             </select> 
                         </li>

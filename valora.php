@@ -1,3 +1,67 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $db = new mysqli("localhost", "root", "", "fysmx");
+    if ($db->connect_error) {
+        die("Error de conexión: " . $db->connect_error);
+    }
+
+    // Obtención de los datos del formulario
+    $opinion = isset($_POST["opinion"]) ? $_POST["opinion"] : "";
+    $calificacion = isset($_POST["calificacion"]) ? $_POST["calificacion"] : "";
+    $nombre_licenciatura = isset($_POST["nombre_licenciatura"]) ? $_POST["nombre_licenciatura"] : "";
+
+    // Validación y sanitización de los datos
+    $opinion = filter_var($opinion, FILTER_SANITIZE_STRING);
+    $calificacion = filter_var($calificacion, FILTER_SANITIZE_NUMBER_INT);
+    $nombre_licenciatura = filter_var($nombre_licenciatura, FILTER_SANITIZE_STRING);
+
+    // Búsqueda del id de la licenciatura
+    $query1 = "SELECT id
+    FROM licenciaturas
+    WHERE nombre = '{$nombre_licenciatura}';";
+    $resultado = $db->query($query1);
+
+    // Obtención del id
+    $id_licenciatura = $resultado->fetch_assoc()['id'];
+
+    // Preparación de la consulta SQL
+    $query = "INSERT INTO opiniones (opinion, calificacion, id_licenciatura, fecha_creacion) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+    $stmt = $db->prepare($query);
+
+    // Verificar si la preparación de la consulta fue exitosa
+    if ($stmt === false) {
+        die('Error de preparación: ' . $db->error);
+    }
+
+    // Vinculación de los valores
+    $stmt->bind_param("ssi", $opinion, $calificacion, $id_licenciatura);
+
+    // Ejecución de la consulta
+    $resultado = $stmt->execute();
+
+    // Envío de comentarios al usuario
+    if ($resultado) {
+        // Comentarios exitosos
+        echo '<script>
+                window.onload = function() {
+                    alert("Gracias por tu opinión. Se ha guardado correctamente.");
+                };
+            </script>';
+    } else {
+        // Comentarios fallidos
+        echo '<script>
+        window.onload = function() {
+            alert("Hubo un error al guardar la opinión. Por favor, vuelve a intentarlo.");
+        };
+        </script>';
+    }
+
+    // Cierre de la conexión a la base de datos
+    $stmt->close();
+    $db->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +117,7 @@
                             <ion-icon class="ico" name="school-sharp"></ion-icon>
                             <p>Escuelas</p>
                         </a>
-                        <a class="text-center iconoText navegacion__enlace" href="valora.html">
+                        <a class="text-center iconoText navegacion__enlace" href="valora.php">
                             <ion-icon class="ico" name="star"></ion-icon>
                             <p>Valora</p>
                         </a>
@@ -67,36 +131,40 @@
             <h3 class="centrar-texto">Valora Licenciaturas</h3>
         </div>
         <div class="contacto-bg"></div>
-        <form class="formulario" action="?" method="POST">
+        <form id="1" class="formulario" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" onsubmit="return validarFormulario() ">
             <div class="campo iconoText">
                 <ion-icon class="ico" name="school"></ion-icon>
-                <label class="campo__label" for="nombre">Escuela:</label>
-                <input class="campo__field" type="text" placeholder="Tu escuela" id="escuela">
+                <label class="campo__label" for="carrera">Carrera:</label>
+                <select id="carreras-select" class="campo__field" name="nombre_licenciatura" onchange="actualizarIdLicenciatura()">
+                </select>
             </div>
-            <div class="campo iconoText">
-                <ion-icon class="ico" name="receipt-outline"></ion-icon>
-                <label class="campo__label" for="email">Carrera:</label>
-                <input class="campo__field" type="email" placeholder="Tu carrera" id="email">
-            </div>   
+            <!-- Otros campos de formulario -->
             <div class="campo iconoText">
                 <ion-icon class="ico" name="help-outline"></ion-icon>
                 <label class="campo__label" for="mensaje">Opinion:</label>
-                <textarea class="campo__field campo__field--textarea" id="mensaje">
-                </textarea>
+                <textarea class="campo__field campo__field--textarea" id="mensaje" name="opinion"></textarea>
             </div>
             <div class="campo iconoText">
-                <ion-icon class="ico" name="checkbox-outline"></ion-icon>
-                <label for="rating-container">Calificacion:</label>
-                <div class="rating-container campo__field--star" id="rating-container">
-                    <!-- Aquí se generarán las estrellas dinámicamente -->
+                <ion-icon class="ico" name="star"></ion-icon>
+                <label for="calificacion">Calificación:</label>
+                <div class="star-rating">
+                    <input class="radio" type="radio" name="calificacion" id="star5" value="5" />
+                    <label for="star5"></label>
+                    <input type="radio" name="calificacion" id="star4" value="4" />
+                    <label for="star4"></label>
+                    <input type="radio" name="calificacion" id="star3" value="3" />
+                    <label for="star3"></label>
+                    <input type="radio" name="calificacion" id="star2" value="2" />
+                    <label for="star2"></label>
+                    <input type="radio" name="calificacion" id="star1" value="1" />
+                    <label for="star1"></label>
                 </div>
-                <p>Calificación: <span id="rating-value">0</span></p>
             </div>
             <div class="campo">
                 <div class="g-recaptcha campo__reCAPTCHA" data-sitekey="6LfQuTQpAAAAAMdhOs72aogdADFsA0v1bbp2Wy_A"></div>
             </div> 
             <div class="campo">
-                <input  type="submit" value="Enviar" class="boton campo__reCAPTCHA">
+                <input type="submit" value="Enviar" class="boton campo__reCAPTCHA">
             </div>        
         </form>
     </section>
@@ -138,9 +206,11 @@
     <script src="js/menuR.js"></script>
     <!-- Script  soporte Webp-->
     <script src="js/imagenWebp.js"></script>
-    <!-- Script para calificacion -->
-    <script src="js/vEstrellas.js"></script>
     <!-- Script recaptcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Script desplegable -->
+    <script src="js/dCarreras.js"></script>
+
+    <script src="js/r.js"></script>
 </body>
 </html>

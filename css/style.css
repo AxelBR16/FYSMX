@@ -615,7 +615,7 @@ footer a{
     margin-left: 1.5rem;
     margin-bottom: 7rem;
 }
-.carrera__ico{
+.carrera__ico{ 
     color: var(--secundarioOscuro);
 }
 @media (min-width: 768px){
@@ -646,4 +646,17 @@ footer a{
 .paginacion--active{
     background-color: #000;
     color: #8F7;
+}
+/*Valora*/
+.mensaje-enviado {
+    display: none;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+.icono-enviado {
+    margin-right: 5px;
 }

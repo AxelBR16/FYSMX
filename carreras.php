@@ -34,7 +34,7 @@ if ($id == ''  || $token == '') {
             $nombre = $row['nombre'];
             $precio = $row['precio'];
             $descripcionC = $row['descripcionC'];
-            $planEstudios = $row['planEstudios'];
+            $planEstudios = $row['planEstudios'];/**/ 
             $procesoAdmision = $row['procesoAdmision'];
             $sedes = $row['sedes'];
         
@@ -54,6 +54,58 @@ if ($id == ''  || $token == '') {
              if(!file_exists($imagen)) {
                       $imagen = "img/escuelas/noFoto.png";
                     }
+
+            
+            //codigo prueba
+        
+        function area($planEstudios){
+            // Inicializar variables para almacenar las áreas y las licenciaturas            
+            $areas = [];
+            $licenciaturas = '';
+
+            // Iterar sobre los resultados de la consulta
+
+                // Dividir la cadena por asteriscos "*"
+                $datosAreas = explode('*', $planEstudios);
+
+                // Iterar sobre las áreas encontradas
+                for ($i = 1; $i < count($datosAreas); $i += 2) {
+                    $area = trim($datosAreas[$i]);
+
+                    // Verificar si el área actual es diferente a la anterior
+                    if (!in_array($area, $areas)) {
+                        //cerrar el Div anterior si existe
+                        if(!empty($licenciaturas)){
+                            echo"</ul></div>";
+                        }
+                        // Imprimir el encabezado <h2> para el área
+                        echo "<div class='contenido_periodo'>";
+                        echo "<h4>$area</h4>";
+                        echo "<ul>"; // Iniciar la lista <ul>
+                        $areas[] = $area; // Agregar el área actual al array
+                    }
+
+                    // Obtener las licenciaturas
+                    if ($i + 1 < count($datosAreas)) {
+                        $licenciaturas = trim($datosAreas[$i + 1]);
+                        // Dividir las licenciaturas por coma y crear <li> para cada una
+                        $licenciaturasArray = explode(',', $licenciaturas);
+                        foreach ($licenciaturasArray as $lic) {
+                            echo "<li>$lic</li>";
+                        }
+                    }
+               // echo "</ul>";
+                }
+                // Cerrar el último div y la última lista
+                if (!empty($licenciaturas)) {
+                    echo "</ul></div>";
+                }
+        }
+            
+    //FIN CODIGO PRUEBA
+
+
+            
         } 
 
 
@@ -77,7 +129,8 @@ if ($id == ''  || $token == '') {
 
     <title>FYSMX</title>
     <!-- Prefetch -->
-    
+    <!--BoxIcons Link-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Preload (lo que se cargue primero)-->
     <!-- Internas -->
     <link rel="preload" href="css/normalize.css" as="style">
@@ -100,6 +153,9 @@ if ($id == ''  || $token == '') {
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
 
+    <link rel="preload" href="css/carreras.css" as="style">
+    <link rel="stylesheet" href="css/carreras.css">
+
 
 </head>
        
@@ -121,7 +177,7 @@ if ($id == ''  || $token == '') {
                     <ion-icon class="ico" name="school-sharp"></ion-icon>
                     <p>Escuelas</p>
                 </a>
-                <a class="text-center iconoText navegacion__enlace" href="valora.html">
+                <a class="text-center iconoText navegacion__enlace" href="valora.php">
                     <ion-icon class="ico" name="star"></ion-icon>
                     <p>Valora</p>
                 </a>
@@ -134,18 +190,113 @@ if ($id == ''  || $token == '') {
                 <img  class="img-fluid detalles__imagen" src="<?php echo $imagen; ?>" alt="">
                     <p><?php echo $descripcionC; ?></p>
                     <br>
-                    <h3>Costo</h3>
-                    <p>Esta carrera tiene una mensualidad de $ <?php echo number_format($row['precio'],2,'.',','); ?> MXN</p>
+
+                    <div class="servicios">
+
+                        <section class="servicio">
+                            <h3>Costo</h3>
+                                <div class="iconos">
+                                    <i class='bx bx-money'></i>
+                                </div>
+                                <p>Esta carrera tiene una mensualidad de $ <?php echo number_format($row['precio'],2,'.',','); ?> MXN.</p>
+
+                        </section>
+
+
+
+                        <section class="servicio sede">
+
+                            <h3>Sedes</h3>
+                            
+                                <div class="iconos">
+                                    <i class='bx bxs-school' ></i>
+                                </div>
+                                
+                                <p><?php echo $sedes;?></p>    
+                        </section>
+                    </div><!--Servicios-->
+
                     <br>
-                    <h3>Plan de estudios</h3>
-                    <p><?php echo $planEstudios;?></p>
+
+                    <div class="planestudios">
+                        <h3>Plan de estudios</h3>
+                        <div class="periodos">
+                        <?php area($planEstudios);?>
+                        </div>   
+                    </div>
+                                        
                     <br>
                     <h3>Proceso para ingresar</h3>
                     <p><?php echo $procesoAdmision;?></p>
                     <br>
-                    <h3>Sedes</h3>
-                    <p><?php echo $sedes;?></p>
                 </div>
+            <br>
+            <?php
+            // Consulta SQL para obtener todas las calificaciones
+            $sql = $con->prepare("SELECT calificacion FROM opiniones WHERE id_licenciatura = ?");
+            $sql->execute([$id]);
+
+            // Verificar si hay resultados y calcular el promedio
+            if ($sql->rowCount() > 0) {
+                $totalCalificaciones = 0;
+                $numCalificaciones = 0;
+
+                while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+                    $totalCalificaciones += $row['calificacion'];
+                    $numCalificaciones++;
+                }
+
+                // Calcular el promedio
+                $promedio = $numCalificaciones > 0 ? $totalCalificaciones / $numCalificaciones : 0;
+
+                function generarEstrellas($promedio) {
+                    // Redondear el promedio y limitarlo a estar entre 0 y 5
+                    $cantidadEstrellas = min(5, max(0, round($promedio)));
+                
+                    // HTML para la representación de las estrellas
+                    $estrellasHTML = '';
+                
+                    // Generar estrellas completas
+                    for ($i = 1; $i <= $cantidadEstrellas; $i++) {
+                        $estrellasHTML .= '<ion-icon style="text-align: center; color: #a3a741;" name="star"></ion-icon>';
+                    }
+                
+                    // Mostrar estrellas vacías si es necesario
+                    for ($i = $cantidadEstrellas + 1; $i <= 5; $i++) {
+                        $estrellasHTML .= '<ion-icon name="star-outline"></ion-icon>';
+                    }
+                
+                    return $estrellasHTML;
+                }
+                
+                $promedioEjemplo = $promedio;
+                  // Verificar si el promedio tiene decimales
+                if ($promedio != floor($promedio)) {
+                    echo "<h3>Comentarios de estudiantes (" . number_format($promedioEjemplo, 2) . " " . generarEstrellas($promedioEjemplo) . ")</h3>";
+                } else {
+                    echo "<h3>Comentarios de estudiantes ".generarEstrellas($promedioEjemplo) ." (" . number_format($promedioEjemplo, 0) .")</h3>";
+                }
+            }
+  
+            $commentsSql = $con->prepare('SELECT opinion, calificacion, fecha_creacion FROM opiniones WHERE id_licenciatura = ?');
+            $commentsSql->execute([$id]);
+
+     
+            if ($commentsSql->rowCount() > 0) {
+
+        
+                while ($comment = $commentsSql->fetch(PDO::FETCH_ASSOC)) {
+                    echo '<div class="comentario">';
+                    echo '<p>Fecha: ' . $comment['fecha_creacion'] . '</p>';
+                    echo '<p>Calificación: ' . $comment['calificacion'] . '</p>';
+                    echo '<p>' . $comment['opinion'] . '</p>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<h3Comentarios de estudiantes</h3>';
+                echo '<p>No hay comentarios disponibles.</p>';
+            }
+            ?>
              </div><!--.contenedor -->
         </main>
     </div>
