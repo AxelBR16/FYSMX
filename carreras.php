@@ -254,14 +254,15 @@ if ($id == ''  || $token == '') {
         </nav>
     </div>
         <main>
-            <div class="contenedor">
-                <h2 class="detalles__titulo"><?php echo $nombre; ?></h2>
+            <div>
+                
+                <h2 class="detalles__titulo contenedor"><?php echo $nombre; ?></h2>
                 <div>
                 <img  class="img-fluid detalles__imagen" src="<?php echo $imagen; ?>" alt="">
-                    <p><?php echo $descripcionC; ?></p>
+                    <p class="contenedor"><?php echo $descripcionC; ?></p>
                     <br>
 
-                    <div class="servicios">
+                    <div class="servicios contenedor">
 
                         <section class="servicio">
                             <h3>Costo</h3>
@@ -274,7 +275,7 @@ if ($id == ''  || $token == '') {
 
 
 
-                        <section class="servicio sede">
+                        <section class="servicio sede ">
 
                             <h3>Sedes</h3>
                             
@@ -288,17 +289,16 @@ if ($id == ''  || $token == '') {
                     </div><!--Servicios-->
 
                     <br>
-
-                    <div class="planestudios">
-                        <h3>Plan de estudios</h3>
-                        <div class="periodos">
-                        <?php area($planEstudios);?>
-                        </div>   
+                    <div class="contenedor-planE">
+                        <div class="planestudios contenedor">
+                            <h3>Plan de estudios</h3>
+                            <div class="periodos">
+                            <?php area($planEstudios);?>
+                            </div>   
+                        </div>
                     </div>
-                                        
-                    <br>
                     <div class="proadmi">
-                        <h3>Proceso para ingresar</h3>
+                        <h3 class="proadmi_titulo">Proceso para ingresar</h3>
                         <div class="proadmi_con">
                         
                             <div class="proadmi_lista">
@@ -314,73 +314,74 @@ if ($id == ''  || $token == '') {
                         
                     </div>
                 </div>
-            <br>
-            <?php
-            // Consulta SQL para obtener todas las calificaciones
-            $sql = $con->prepare("SELECT calificacion FROM opiniones WHERE id_licenciatura = ?");
-            $sql->execute([$id]);
+                <div class="comentarios contenedor">
+                    <?php
+                    // Consulta SQL para obtener todas las calificaciones
+                    $sql = $con->prepare("SELECT calificacion FROM opiniones WHERE id_licenciatura = ?");
+                    $sql->execute([$id]);
 
-            // Verificar si hay resultados y calcular el promedio
-            if ($sql->rowCount() > 0) {
-                $totalCalificaciones = 0;
-                $numCalificaciones = 0;
+                    // Verificar si hay resultados y calcular el promedio
+                    if ($sql->rowCount() > 0) {
+                        $totalCalificaciones = 0;
+                        $numCalificaciones = 0;
 
-                while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-                    $totalCalificaciones += $row['calificacion'];
-                    $numCalificaciones++;
-                }
+                        while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+                            $totalCalificaciones += $row['calificacion'];
+                            $numCalificaciones++;
+                        }
 
-                // Calcular el promedio
-                $promedio = $numCalificaciones > 0 ? $totalCalificaciones / $numCalificaciones : 0;
+                        // Calcular el promedio
+                        $promedio = $numCalificaciones > 0 ? $totalCalificaciones / $numCalificaciones : 0;
 
-                function generarEstrellas($promedio) {
-                    // Redondear el promedio y limitarlo a estar entre 0 y 5
-                    $cantidadEstrellas = min(5, max(0, round($promedio)));
-                
-                    // HTML para la representación de las estrellas
-                    $estrellasHTML = '';
-                
-                    // Generar estrellas completas
-                    for ($i = 1; $i <= $cantidadEstrellas; $i++) {
-                        $estrellasHTML .= '<ion-icon style="text-align: center; color: #a3a741;" name="star"></ion-icon>';
+                        function generarEstrellas($promedio) {
+                            // Redondear el promedio y limitarlo a estar entre 0 y 5
+                            $cantidadEstrellas = min(5, max(0, round($promedio)));
+                        
+                            // HTML para la representación de las estrellas
+                            $estrellasHTML = '';
+                        
+                            // Generar estrellas completas
+                            for ($i = 1; $i <= $cantidadEstrellas; $i++) {
+                                $estrellasHTML .= '<ion-icon style="text-align: center; color: #a3a741;" name="star"></ion-icon>';
+                            }
+                        
+                            // Mostrar estrellas vacías si es necesario
+                            for ($i = $cantidadEstrellas + 1; $i <= 5; $i++) {
+                                $estrellasHTML .= '<ion-icon name="star-outline"></ion-icon>';
+                            }
+                        
+                            return $estrellasHTML;
+                        }
+                        
+                        $promedioEjemplo = $promedio;
+                        // Verificar si el promedio tiene decimales
+                        if ($promedio != floor($promedio)) {
+                            echo "<h3 class='comentario-titulo'>Comentarios de estudiantes (" . number_format($promedioEjemplo, 2) . " " . generarEstrellas($promedioEjemplo) . ")</h3>";
+                        } else {
+                            echo "<h3 class='comentario-titulo'>Comentarios de estudiantes ".generarEstrellas($promedioEjemplo) ." (" . number_format($promedioEjemplo, 0) .")</h3>";
+                        }
                     }
-                
-                    // Mostrar estrellas vacías si es necesario
-                    for ($i = $cantidadEstrellas + 1; $i <= 5; $i++) {
-                        $estrellasHTML .= '<ion-icon name="star-outline"></ion-icon>';
-                    }
-                
-                    return $estrellasHTML;
-                }
-                
-                $promedioEjemplo = $promedio;
-                  // Verificar si el promedio tiene decimales
-                if ($promedio != floor($promedio)) {
-                    echo "<h3>Comentarios de estudiantes (" . number_format($promedioEjemplo, 2) . " " . generarEstrellas($promedioEjemplo) . ")</h3>";
-                } else {
-                    echo "<h3>Comentarios de estudiantes ".generarEstrellas($promedioEjemplo) ." (" . number_format($promedioEjemplo, 0) .")</h3>";
-                }
-            }
-  
-            $commentsSql = $con->prepare('SELECT opinion, calificacion, fecha_creacion FROM opiniones WHERE id_licenciatura = ?');
-            $commentsSql->execute([$id]);
-
-     
-            if ($commentsSql->rowCount() > 0) {
-
         
-                while ($comment = $commentsSql->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<div class="comentario">';
-                    echo '<p>Fecha: ' . $comment['fecha_creacion'] . '</p>';
-                    echo '<p>Calificación: ' . $comment['calificacion'] . '</p>';
-                    echo '<p>' . $comment['opinion'] . '</p>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<h3Comentarios de estudiantes</h3>';
-                echo '<p>No hay comentarios disponibles.</p>';
-            }
-            ?>
+                    $commentsSql = $con->prepare('SELECT opinion, calificacion, fecha_creacion FROM opiniones WHERE id_licenciatura = ?');
+                    $commentsSql->execute([$id]);
+
+            
+                    if ($commentsSql->rowCount() > 0) {
+
+                
+                        while ($comment = $commentsSql->fetch(PDO::FETCH_ASSOC)) {
+                            echo '<div class="comentario">';
+                            echo '<div class="iconoText"><ion-icon class="ico" name="calendar-outline"></ion-icon><p>' . $comment['fecha_creacion'] . '</p></div>';
+                            echo '<p>Calificación: ' . $comment['calificacion'] . '</p>';
+                            echo '<div style="display: flex; gap: 1rem;"><ion-icon class="ico" name="chatbubble-ellipses-outline"></ion-icon><p>' . $comment['opinion'] . '</p></div>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<h3Comentarios de estudiantes</h3>';
+                        echo '<p>No hay comentarios disponibles.</p>';
+                    }
+                    ?>
+                </div>
              </div><!--.contenedor -->
         </main>
     </div>

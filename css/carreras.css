@@ -1,3 +1,64 @@
+@-webkit-keyframes flicker-1 {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    41.99% {
+      opacity: 1;
+    }
+    42% {
+      opacity: 0;
+    }
+    43% {
+      opacity: 0;
+    }
+    43.01% {
+      opacity: 1;
+    }
+    47.99% {
+      opacity: 1;
+    }
+    48% {
+      opacity: 0;
+    }
+    49% {
+      opacity: 0;
+    }
+    49.01% {
+      opacity: 1;
+    }
+  }
+  @keyframes flicker-1 {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    41.99% {
+      opacity: 1;
+    }
+    42% {
+      opacity: 0;
+    }
+    43% {
+      opacity: 0;
+    }
+    43.01% {
+      opacity: 1;
+    }
+    47.99% {
+      opacity: 1;
+    }
+    48% {
+      opacity: 0;
+    }
+    49% {
+      opacity: 0;
+    }
+    49.01% {
+      opacity: 1;
+    }
+  }
+  
 :root{
     --section:#08f;
     --primario:#02416D;
@@ -95,6 +156,14 @@ body{
 }
 
 /*Plan estudios*/
+.contenedor-planE {
+    padding-top: 2rem;
+    background-color: black;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .planestudios{
     display: flex;
     flex-direction: column;
@@ -103,6 +172,7 @@ body{
 
 .planestudios h3{
     color:azure;
+    font-size: 3rem;
 }
 
 .planestudios .periodos{
@@ -126,7 +196,19 @@ body{
     
 }
 
-.planestudios .periodos .contenido_periodo h4,
+.planestudios .periodos .contenido_periodo h4{
+    -moz-transform: translate(-25px, 0px) skew(-16deg, 0deg);
+    -webkit-transform: translate(-25px, 0px) skew(-16deg, 0deg);
+    -o-transform: translate(-25px, 0px) skew(-16deg, 0deg);
+    -ms-transform: translate(-25px, 0px) skew(-16deg, 0deg);
+    transform: translate(-25px, 0px) skew(-16deg, 0deg);
+    color: #ffffffc1;
+    background: #d2e99d;
+  text-shadow: 0 1px 0px #378ab4, 1px 0 0px #5dabcd, 1px 2px 1px #378ab4, 2px 1px 1px #5dabcd, 2px 3px 2px #378ab4, 3px 2px 2px #5dabcd, 3px 4px 2px #378ab4, 4px 3px 3px #5dabcd, 4px 5px 3px #378ab4, 5px 4px 2px #5dabcd, 5px 6px 2px #378ab4, 6px 5px 2px #5dabcd, 6px 7px 1px #378ab4, 7px 6px 1px #5dabcd, 7px 8px 0px #378ab4, 8px 7px 0px #5dabcd;
+ 
+}
+
+
 .planestudios .periodos .contenido_periodo li{
     font-size: 1.5rem;
     color: white;
@@ -135,10 +217,15 @@ body{
 
 /*Proceso Admisiom*/
 .proadmi{
-    background-color: var(--blanco);
+    background: #e7e5e4;
     padding: 5%;
 }
-
+.proadmi_titulo{
+     font-size: 3rem;
+    color: #131313;
+    letter-spacing: .15em;
+    text-shadow: 2px 2px 0 #bcbcbc, 4px 4px 0 #9c9c9c;
+}
 .proadmi .proadmi_con{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -152,7 +239,30 @@ body{
 
 .proadmi .proadmi_con .img{
     grid-column: 3/4;
+
     background-image: url(../img/proadmi.png);
     background-repeat: no-repeat;
 }
 
+.comentarios{
+    background-color: #ffffff;
+    padding-bottom: 1rem;
+    overflow-y: scroll;
+    max-height: 80rem;
+    margin-bottom: 3rem;
+    -webkit-box-shadow: 5px 5px 0px 0px #289FED, 10px 10px 0px 0px #5FB8FF, 15px 15px 0px 0px #A1D8FF, 20px 20px 0px 0px #CAE6FF, 25px 25px 0px 0px #E1EEFF, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 5px 5px 0px 0px #289FED, 10px 10px 0px 0px #5FB8FF, 15px 15px 0px 0px #A1D8FF, 20px 20px 0px 0px #CAE6FF, 25px 25px 0px 0px #E1EEFF, 5px 5px 15px 5px rgba(0,0,0,0);
+}
+.comentario-titulo{
+    margin-top: 2rem;
+    margin-left: 1rem;
+    font-size: 3rem;
+}
+.comentario p {
+    
+}
+.comentario{
+    border-top: 8px solid #1C6EA4;
+    border-radius: 0px 40px 0px 0px;
+    margin: 0 3rem;
+}
