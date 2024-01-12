@@ -54,6 +54,14 @@ if ($id == ''  || $token == '') {
              if(!file_exists($imagen)) {
                       $imagen = "img/escuelas/noFoto.png";
                     }
+            $imagenes = array();
+            $dir = dir($directorio);
+
+            while (($archivo = $dir->read()) != false){
+                if ($archivo != 'principal.jpg' && $archivo != 'principal.jpeg' && $archivo != 'principal.jpeg' && (strpos($archivo,'jpeg') || strpos($archivo,'jpg'))){
+                    $imagenes[] = $directorio.$archivo;
+                }
+            }        
 
      //Funcion Sedes
         
@@ -212,25 +220,20 @@ if ($id == ''  || $token == '') {
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/brutus-academy" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    
-    
-                
-   
-                
+
     <!-- Internas -->
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
 
     <link rel="preload" href="css/carreras.css" as="style">
     <link rel="stylesheet" href="css/carreras.css">
-
-
+    
 </head>
        
 <body>
-    <div class="contenedor barra sticky">
+    <div class="contenedor barra">
         <div class="barraR">
             <ion-icon id="btn-menu" class="ico" name="menu-outline"></ion-icon>
             <a class="logo" href="index.html" >
@@ -255,15 +258,61 @@ if ($id == ''  || $token == '') {
     </div>
         <main>
             <div>
-                
-                <h2 class="detalles__titulo contenedor"><?php echo $nombre; ?></h2>
+                <div class="ser">
+                <div id="carouselExampleControls" class="carousel slide carreras__imagen " data-bs-ride="carousel" >
+                        <div class="carousel-inner">
+                            <div class="carousel-item active" data-bs-interval="5000">
+                            <img  class="img-fluid detalles__imagen opacity-50" src="<?php echo $imagen; ?>" alt=""  style="height: 60rem;">
+                            <div class="carousel-caption d-none d-md-block">
+                                        <p class="detalles__info">
+                                        <span class="detalles__info--active">
+                                            <?php
+                                                // Dividir el texto en partes basadas en el punto
+                                                $partes = explode('.', $descripcionC);
+
+                                                // Imprimir las partes
+                                                echo $nombre;
+                                            ?>
+                                        </span>
+                                        <br>
+                                        <?php
+                                            echo trim($partes[0]);
+                                        ?>
+                                        </p>
+                            </div>
+                            </div>
+
+                            <?php 
+                                foreach($imagenes as $index => $imagenC) {
+                                    // Obtener la parte correspondiente o cadena vacía si no existe
+                                    $parteActual = isset($partes[$index + 1]) ? trim($partes[$index + 1]) : ''; 
+                                    
+                                    ?>
+                                    <div class="carousel-item">
+                                        <img class="img-fluid detalles__imagen opacity-50" src="<?php echo $imagenC; ?>" alt="" style="height: 60rem;">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <p class="detalles__info">
+                                                <?php 
+                                                echo $parteActual;
+                                                ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                            <?php } ?>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                </div>
                 <div>
-                <img  class="img-fluid detalles__imagen" src="<?php echo $imagen; ?>" alt="">
-                    <p class="contenedor"><?php echo $descripcionC; ?></p>
-                    <br>
-
+                    
                     <div class="servicios contenedor">
-
+                        
                         <section class="servicio">
                             <h3>Costo</h3>
                                 <div class="iconos">
@@ -286,9 +335,8 @@ if ($id == ''  || $token == '') {
                                 <?php sedes($sedes);?>
                                 </div>  
                         </section>
-                    </div><!--Servicios-->
-
-                    <br>
+                    </div><!--Servicios-->    
+                    </div>
                     <div class="contenedor-planE">
                         <div class="planestudios contenedor">
                             <h3>Plan de estudios</h3>
@@ -314,6 +362,7 @@ if ($id == ''  || $token == '') {
                         
                     </div>
                 </div>
+                
                 <div class="comentarios contenedor">
                     <?php
                     // Consulta SQL para obtener todas las calificaciones
@@ -424,7 +473,8 @@ if ($id == ''  || $token == '') {
     <!-- Script  soporte Webp-->
     <script src="js/imagenWebp.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 
 </body>
 </html>

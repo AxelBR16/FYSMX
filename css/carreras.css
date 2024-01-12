@@ -67,11 +67,6 @@
     --azulclaro:rgb(76, 159, 233);
     --azuloscuro:rgb(5, 74, 134);
 }
-
-body{
-    background-image: linear-gradient(to top, var(--primario) 0%, var(--blanco) 100% ) ;
-}
-
 /*Imagenes Escuela*/
 .escuela{
     display: grid;
@@ -88,18 +83,23 @@ body{
 }
 
 
-.escuela .detalles__imagen{
-    height: 40rem;
-    width: 100%;
-    object-fit: contain;
+
+.carreras__imagen{
+  background-color: #000000;
+  border-radius: 0;
+
 }
 
-
 /*Servicios*/
+.ser{
+  background-color: #ffffff;
+}
 
 .servicios{
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    padding-top: 10rem;
+    padding-bottom: 10rem;
 }
 
 @media (min-width: 768px) { 
@@ -217,7 +217,6 @@ body{
 
 /*Proceso Admisiom*/
 .proadmi{
-    background: #e7e5e4;
     padding: 5%;
 }
 .proadmi_titulo{
@@ -239,9 +238,10 @@ body{
 
 .proadmi .proadmi_con .img{
     grid-column: 3/4;
-
-    background-image: url(../img/proadmi.png);
+    background-image: url(../img/altavoz-3d.png);
     background-repeat: no-repeat;
+    background-position: center;
+    background-size  : contain;
 }
 
 .comentarios{

@@ -128,7 +128,29 @@ $con = $db->conectar();
     
     
                 </li>
+
+                
+                <li>
+                    <div class="icon-links">
+                        <a href="#">
+                        <i class='bx bxs-universal-access'></i>
+                            <span class="link_name">Area</span>
+                        </a>
+                        <i class='bx bx-chevron-down arrow'></i>
+                    </div>
     
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="#">Area</a></li>
+                        <li><select name="area">
+                        <option value="0">Area</option>
+                                <option value="1">Ciencia y tecnologia/Ingenieria</option>
+                                <option value="2">Salud</option>
+                                <option value="3">Artes y Humanidades</option>
+                                <option value="4">Ciencias Sociales</option>
+                            </select> 
+                        </li>
+                    </ul>
+                </li>
     
                 <li>
                     <div class="icon-links">
@@ -140,16 +162,6 @@ $con = $db->conectar();
                     </div>
     
                     <ul class="sub-menu">
-                        <li><a class="link_name" href="#">Area</a></li>
-                        <li><select name="Area">
-                        <option value="0">Area</option>
-                                <option value="1">Ciencia y tecnologia/Ingenieria</option>
-                                <option value="2">Salud</option>
-                                <option value="3">Artes y Humanidades</option>
-                                <option value="4">Ciencias Sociales</option>
-                            </select> 
-                        </li>
-                    
                         <li><select name="carrera">
                         <option value="0">Carrera</option>
                                 <option value="1">Arquitectura</option>
@@ -182,27 +194,7 @@ $con = $db->conectar();
                     </ul>
                 </li>
     
-                <li>
 
-                    <div class="icon-links">
-                        <a href="#">
-                            <i class='bx bxs-star-half' ></i>
-                            <span class="link_name">Prestigio</span>
-                        </a>
-                        <i class='bx bx-chevron-down arrow'></i>
-                    </div>
-    
-                    <ul class="sub-menu">
-                        <li><a class="link_name" href="#">Prestigio</a></li>
-                        <li>
-                            <i class='bx bx-star' ></i>
-                            <i class='bx bx-star' ></i>
-                            <i class='bx bx-star' ></i>
-                            <i class='bx bx-star' ></i>
-                            <i class='bx bx-star' ></i>
-                        </li>
-                    </ul>
-                </li>
             </ul>
             </form>
             <?php
@@ -221,6 +213,11 @@ $con = $db->conectar();
                 // Construye la condición del rango de precios y código postal
                 $condicionPrecio = '';
                 $condicionCodigoPostal = '';
+
+                // Aquí se añade la condición para obtener los valores de la columna "carreras"
+                $condicionCarrera = '';
+                $condicionarea ='';
+
                 if (isset($_GET['rango-precio']) && $_GET['rango-precio'] != '0') {
                     $rangosPrecios = array(
                         '1' => array(0, 1000),
@@ -241,8 +238,18 @@ $con = $db->conectar();
                     $condicionCodigoPostal = ' AND FIND_IN_SET(:codigoPostal, codigosPostales) > 0';
                 }
 
+                if (isset($_GET['carrera']) && !empty($_GET['carrera'])) {
+                    $carrera = $_GET['carrera'];
+                    $condicionCarrera = ' AND carrera = :carrera';
+                }
+
+                if (isset($_GET['area']) && !empty($_GET['area'])) {
+                    $area = $_GET['area'];
+                    $condicionarea = ' AND area = :area';
+                }
                 // Modificar la consulta para obtener el total de filas
-                $sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal");
+                //$sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal");
+                $sqlCount = $con->prepare("SELECT COUNT(*) as total FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal $condicionCarrera $condicionarea");
 
                 // Si hay condición de precio, también vincula los parámetros del rango de precios
                 if (!empty($condicionPrecio)) {
@@ -255,12 +262,20 @@ $con = $db->conectar();
                     $sqlCount->bindParam(':codigoPostal', $codigoPostal, PDO::PARAM_STR);
                 }
 
+                 // Si hay condición de carreras, también vincula el parámetro de carreras
+                if (!empty($condicionCarrera)) {
+                    $sqlCount->bindParam(':carrera', $carrera, PDO::PARAM_INT);
+                }
+
+                if (!empty($condicionarea)) {
+                    $sqlCount->bindParam(':area', $area, PDO::PARAM_INT);
+                }
                 // Ejecuta la consulta para obtener el total de filas
                 $sqlCount->execute();
                 $totalFilas = $sqlCount->fetch(PDO::FETCH_ASSOC)['total'];
 
                 // Prepara la consulta SQL con LIMIT, OFFSET y la condición del rango de precios y código postal
-                $sql = $con->prepare("SELECT id, nombre, precio, sedes, universidad FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal LIMIT :resultadosPorPagina OFFSET :offset");
+                $sql = $con->prepare("SELECT id, nombre, precio, sedes, universidad, carrera, area FROM licenciaturas WHERE 1 $condicionPrecio $condicionCodigoPostal $condicionCarrera $condicionarea LIMIT :resultadosPorPagina OFFSET :offset");
 
                 $sql->bindParam(':resultadosPorPagina', $resultadosPorPagina, PDO::PARAM_INT);
                 $sql->bindParam(':offset', $offset, PDO::PARAM_INT);
@@ -274,6 +289,15 @@ $con = $db->conectar();
                 // Si hay condición de código postal, también vincula el parámetro del código postal
                 if (!empty($condicionCodigoPostal)) {
                     $sql->bindParam(':codigoPostal', $codigoPostal, PDO::PARAM_STR);
+                }
+
+                 // Si hay condición de carreras, también vincula el parámetro de carreras
+                if (!empty($condicionCarrera)) {
+                    $sql->bindParam(':carrera', $carrera, PDO::PARAM_INT);
+                }
+
+                if (!empty($condicionarea)) {
+                    $sql->bindParam(':area', $area, PDO::PARAM_INT);
                 }
 
                 // Ejecuta la consulta
@@ -314,6 +338,7 @@ $con = $db->conectar();
                       $imagen = "img/escuelas/noFoto.png";
                     }
                       ?>
+                      
                        <img class="img-fluid tam-img-escuelas card-img-top" src="<?php echo $imagen; ?>" alt="<?php echo $id; ?>">
                       <div class="card-body">
                         <h4 class="centrar-texto carrera__titulo"><b><?php echo $row['nombre']; ?></b></h4>

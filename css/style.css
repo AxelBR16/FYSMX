@@ -229,7 +229,10 @@ footer .ico{
     border-radius: 0;
     }
 }
-
+.waves{
+    position: relative;
+    z-index: -1;
+}
 
 /**Header**/
 .webp .header{
@@ -276,6 +279,8 @@ footer .ico{
     top: 0;
     z-index: 2;
 }
+
+
 @media (min-width: 1140px){
     .barra{
         display: flex;
@@ -626,16 +631,24 @@ footer a{
     }
 }
 /*Pagina Detalle de escuela*/
-.detalles__titulo{
-    color: var(--primario);
-    text-shadow: 0 0 0.2em var(--primarioClaro);
-}
-.detalles__imagen{
-    height: 40rem;
-    width: 100%;
-    object-fit: contain;
+.detalles__info--active{
+    font-weight: bold;
+    color: #000000;
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #49ff18, 0 0 30px #49FF18, 0 0 40px #49FF18, 0 0 55px #49FF18, 0 0 75px #49ff18, 2px 2px 2px rgba(8,51,206,0);
 }
 
+.detalles__imagen {
+    height: 40rem;
+    width: 100%;
+    border-radius: 0%;
+}
+.carousel-item img{
+    object-fit: fill; /* Por defecto, utiliza object-fit: cover */
+}
+.detalles__info{
+    color: #fff;
+    font-weight: bold;
+}
 /*Paginacion*/
 .paginacion__item{
     color: var(--negro);
